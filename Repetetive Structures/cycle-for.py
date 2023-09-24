@@ -20,6 +20,6 @@ for i in range(6):
 
 lines = int(input("How many lines would you want to add: "))
 
-for i in range(lines+1):
-    ast = ("*" * i)
+for i in range(1, lines+1):
+    ast = ("*" * (i))
     print(ast)
