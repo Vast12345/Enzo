@@ -1,3 +1,5 @@
+# Empresa-Comision
+
 while True:
 
     comi_puerta =  0.2

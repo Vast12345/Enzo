@@ -6,10 +6,10 @@ beca_academic = 0.5
 beca_cultural = 0.4
 
 while True:
-    code = input("Input your given code: ")
+    code = int(input("Input your given code: "))
     name = input("Input your given name: ")
-    academic = input("Choose your academic proffesion:\n1. Tecnico de sistemas\n2. Tecnico en desarrollo de videojuegos\n3. Tecnico en Animacion Digital\n")
-    beca = input("Choose your Beca:\n1. Beca Academico\n2. Beca Cultural\n3. Sin Beca\n")
+    academic = int(input("Choose your academic proffesion:\n1. Tecnico de sistemas\n2. Tecnico en desarrollo de videojuegos\n3. Tecnico en Animacion Digital\n"))
+    beca = int(input("Choose your Beca:\n1. Beca Academico\n2. Beca Cultural\n3. Sin Beca\n"))
     
     
 
