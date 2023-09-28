@@ -33,8 +33,25 @@
 # else:
 #     print("Invalid format")
 
-n = input("Input a collection of letters")
+n = input("Input a collection of letters: ")
 
-for i in n:
-    if n([i]) == n([i+1]):
-        n.split()[i]
+if n.isalpha() == False:
+    print("Invalid option")
+
+result = ""
+
+
+for e in range(len(n)):
+        current_char = n[e]
+        result += current_char
+
+        if e < len(n) - 1 and n[e] == n[e + 1]:
+            
+
+
+
+print(f"The result of the collection of letters is {result}")
+
+
+
+ 
