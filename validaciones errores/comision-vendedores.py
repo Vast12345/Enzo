@@ -28,11 +28,12 @@ while loop < eval(n):
                 print("Your cedula should only consist of numbers.")
                 print("\n", "=" * 30, "\n")
                 continue
-            elif cedula == "-1":
-                print("Not allowed.")
+            # num_cedula = cedula
+            # if num_cedula < 0:
+                # print("Not allowed.")
             break
-        except ValueError:
-            print("Your cedula should only consist of digits.")
+        except Exception as e:
+            print("Error: correctly input your cedula", e)
             print("\n", "=" * 30, "\n")
         
     while True:

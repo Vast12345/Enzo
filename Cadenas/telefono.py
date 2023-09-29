@@ -39,13 +39,30 @@ if n.isalpha() == False:
     print("Invalid option")
 
 result = ""
+loop = 0
 
+# for e in range(len(n)):
+#         current_char = n[e]
+#         result += current_char
 
-for e in range(len(n)):
-        current_char = n[e]
+#         if e < len(n) - 1 and n[e] == n[e + 1]:
+#             e += 2
+#         else:
+#              e += 1
+while loop < len(n):
+    # current_char = n[loop]
+    # result += current_char
+
+    if loop < len(n) - 1 and n[loop] == n[loop + 1]:
+        loop += 2
+        current_char = n[loop]
+        result += current_char
+    else:
+        loop += 1
+        current_char = n[loop]
         result += current_char
 
-        if e < len(n) - 1 and n[e] == n[e + 1]:
+        
             
 
 
