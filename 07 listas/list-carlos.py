@@ -100,7 +100,7 @@ def agregarEmpleado(lstEmpleado):
     if buscarEmpleado(lstEmpleado, id) != -1:
         print("El id ya existe en la lista")
         input()
-        
+        return
     lstDatos.append(leerIDEmpl())
     lstDatos.append(leerNombreEmpl())
     lstDatos.append(leerHoraTrabEmpl())
@@ -130,16 +130,15 @@ def menu():
         except ValueError:
             print("Error: Invalid option")
 
-
+lstEmpleado = []
 while True:
     op = menu()
-    lstEmpleado = []
     if op == 1:
         agregarEmpleado(lstEmpleado)
         print(lstEmpleado)
         input()
     elif op == 2:
-        
+        pass
         
     elif op == 3:
         pass
