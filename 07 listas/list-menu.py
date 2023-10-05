@@ -96,8 +96,33 @@ def Modify(lstEmpleados, ID):
         val = readVal()
         lstEmpleados[posID][3] = val
 
-# def deleteEmployee(lstEmpleados, ID):
+def removeEmpoleyee(lstEmpleados, ID):
+    posID = findEmployee(lstEmpleados, ID)
+    if posID == -1:
+        print("El id no existe en la lista")
+        input()
+        return
+    lstEmpleados.pop(posID)
 
+def listEmployees(lstEmpleados):
+    continuemore = 4
+    for i in range(len(lstEmpleados)):
+        print(f"ID: {lstEmpleados[i][0]}")
+        print(f"Name: {lstEmpleados[i][1]}")
+        print(f"Hours: {lstEmpleados[i][2]}")
+        print(f"Value: {lstEmpleados[i][3]}")
+        print("\n", "=" * 30, "\n")
+        if i == continuemore:
+            while True:  
+                conti = input("Would you like to continue? (y/n): ")
+                if conti.lower() == "y":
+                    continuemore += 5
+                elif conti.lower() == "n":
+                    break
+                else:
+                    print("Invalid option, choose Y to continue or N to exit.")
+                    input("Press any key to continue")
+                    print("\n", "=" * 30, "\n")
 
 def agregarEmpleados(lstEmpleados):
     print("* New Employee *")
@@ -154,9 +179,12 @@ while True:
         print(lstEmpleados[posID])
         input()
     elif option == 4:
-        pass
+        removeEmpoleyee(lstEmpleados, readId())
+        print(lstEmpleados)
+        input()
     elif option == 5:
-        pass
+        listEmployees(lstEmpleados)
+        input()
     elif option == 6:
         pass
     elif option == 7:
