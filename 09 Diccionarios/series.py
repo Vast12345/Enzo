@@ -48,10 +48,10 @@ def Series(list, n):
 
 def calculation(list):
     dic = list[0]
+    result = 0
     for k, v in dic.items():
         num = v
         sign = 1
-        result = 0
         result += sign * num
 
         sign *= -1
