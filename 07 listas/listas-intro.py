@@ -46,3 +46,7 @@ print(nom_campers)
 # print(list2)
 nom_campers.sort(reverse=True)
 print(nom_campers)
+
+list = {"123":5,"321":1,"1234":2,"4321":15}
+
+print(list.format())
