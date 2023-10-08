@@ -79,7 +79,7 @@ def agregarProducto(dicProduct):
 
 def modifyProduct(dicProduct, ID):
     if findProduct(dicProduct, ID) == None:
-        print("The ID already exist")
+        print("This ID does not exist")
         return
     while True:
         print("* Modify Product *")
@@ -126,16 +126,44 @@ def listProducts(dicProduct):
             op = input("Do you wish to continue? (Y/N) ")
             if op.lower() == "n":
                 return
+            
+def listSort(dicProduct):
+    count = 0
+    # The for loop will go through every key inside of dicProduct, and then the values within that key
+    for k, v in dicProduct:
+        print("\n", "=" * 30, "\n")
+        print(f"ID: {k}")
+        print(f"Name: {v['name']}")
+        print(f"Value: {v['price']}")
+        print(f"Amount: {v['amount']}")
+        print("\n", "=" * 30, "\n")
+        
+        count += 1
+
+        if count % 5 == 0:
+            op = input("Do you wish to continue? (Y/N) ")
+            if op.lower() == "n":
+                return
 
 def sortProducts(dicProducts):
-    lst = dicProduct.values()
-    for i in range(len(lst)):
-        for j in range(i+1):
-            if lst[i]["price"]>lst[j]["price"]:
-                t=lst[i]["price"]
-                lst[i]["price"] = lst[j]["price"]
-                lst[j]["price"] = t
-    return list
+    # Below is the previous failed attempt at sorting the price of each product
+    #
+    # lstVal = list(dicProducts.value())
+    # for i in range(len(lstVal)):
+    #     for j in range(i+1):
+    #         if lstVal[i]["price"] > lstVal[j]["price"]:
+    #             t = lstVal[i]["price"]
+    #             lstVal[i]["price"] = lstVal[j]["price"]
+    #             lstVal[j]["price"] = t
+    # return lstVal
+    
+    # sorteditems is a variable that contains the by-product of a sorting function.
+    # First it creates a tuple with the dicProducts.items() function, then it creates a way of finding the key to each dictionary and converts it to the variable x.
+    # Then it sorts the keys and values in the tuple (with the function x[1]["price"]) and reverses the order with reverse=True
+    sorteditems = sorted(dicProducts.items(), key=lambda x: x[1]["price"], reverse=True)
+    return listSort(sorteditems)
+
+
 def menu():
     while True:
         try:
@@ -178,10 +206,8 @@ while True:
         listProducts(dicProduct)
         input()
     elif option == 5:
-        sortProducts(dicProduct)
-        print(dicProduct)
-        input()
-        pass
+         sortProducts(dicProduct)
+         input()
     elif option == 6:
         input()
         break
