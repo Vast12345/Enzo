@@ -34,7 +34,7 @@ def readNum():
             print("\n", "=" * 30, "\n")
 WinnerList = {}
 while True:
-    number = random.randint(1, 10)
+    number = random.randint(1, 1000)
     name = readStr()
     for i in range(1, 11):
         print(f"Tries: {i}/10")
@@ -47,7 +47,7 @@ while True:
             print("Ganaste")
             WinnerList[name] = i
             break
-    number = random.randint(1, 10)
+    number = random.randint(1, 1000)
             
 
 
@@ -58,4 +58,4 @@ while True:
         continue
 
 sorted_winners = sorted(WinnerList.items(),key=lambda x: x[1])
-print(sorted_winners)           
+print(sorted_winners) 
