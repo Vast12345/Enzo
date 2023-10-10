@@ -17,6 +17,6 @@ def llenarMatriz(mat):
         for c in range(len(mat[f])):
             mat[f][c] = int(input(f"mat[{f+1}][{c+1}]? "))
 
-matriz = crearMatrices(4, 5)
-llenarMatriz(matriz)
-printMatriz(matriz)
+matrix = crearMatrices(4, 5)
+llenarMatriz(matrix)
+printMatriz(matrix)
