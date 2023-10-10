@@ -145,22 +145,22 @@ def listSort(dicProduct):
             if op.lower() == "n":
                 return
 
-def sortProducts(dicProducts):
+def sortProducts(dicProduct):
     # Below is the previous failed attempt at sorting the price of each product
     #
-    # lstVal = list(dicProducts.value())
+    # lstVal = list(dicProducts.items())    # Before: lstVal = list(dicProducts.value())
     # for i in range(len(lstVal)):
     #     for j in range(i+1):
-    #         if lstVal[i]["price"] > lstVal[j]["price"]:
-    #             t = lstVal[i]["price"]
-    #             lstVal[i]["price"] = lstVal[j]["price"]
-    #             lstVal[j]["price"] = t
+    #         if lstVal[i][1]["price"] > lstVal[j][1]["price"]:         #Before: if lstVal[i]["price"] > lstVal[j]["price"]
+    #             t = lstVal[i]                                         # Before: t = lstVal[i]["price"]
+    #             lstVal[i] = lstVal[j]                                 #Before: lstVal[i][1]["price"] = lstVal[j][1]["price"]   
+    #             lstVal[j] = t
     # return lstVal
     
     # sorteditems is a variable that contains the by-product of a sorting function.
     # First it creates a tuple with the dicProducts.items() function, then it creates a way of finding the key to each dictionary and converts it to the variable x.
     # Then it sorts the keys and values in the tuple (with the function x[1]["price"]) and reverses the order with reverse=True
-    sorteditems = sorted(dicProducts.items(), key=lambda x: x[1]["price"], reverse=True)
+    sorteditems = sorted(dicProduct.items(), key=lambda x: x[1]["price"], reverse=True)
     return listSort(sorteditems)
 
 
@@ -196,18 +196,16 @@ while True:
         input()
     elif option == 2:
         modifyProduct(dicProduct, readId())
-        print(dicProduct)
         input()
     elif option == 3:
         eraseProduct(dicProduct, readId())
-        print(dicProduct)
         input()
     elif option == 4:
         listProducts(dicProduct)
         input()
     elif option == 5:
-         sortProducts(dicProduct)
-         input()
+        sortProducts(dicProduct)
+        input()
     elif option == 6:
         input()
         break

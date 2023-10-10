@@ -32,6 +32,21 @@ def readNum():
             print("Error: Invalid input, must be an integer")
             input("Press any key to continue")
             print("\n", "=" * 30, "\n")
+
+def listSort(lista):
+    count = 0
+    # The for loop will go through every key inside of dicProduct, and then the values within that key
+    for k, v in lista:
+        print("\n", "=" * 30, "\n")
+        print(f"Name {k}")
+        print(f"Score: {v}")
+        print("\n", "=" * 30, "\n")
+        
+        count += 1
+
+        if count == 10:
+            return
+
 WinnerList = {}
 while True:
     number = random.randint(1, 1000)
@@ -58,4 +73,4 @@ while True:
         continue
 
 sorted_winners = sorted(WinnerList.items(),key=lambda x: x[1])
-print(sorted_winners) 
+print(listSort(sorted_winners)) 
