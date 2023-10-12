@@ -1,5 +1,5 @@
 fd = open("11- Archivos/mbox-short.txt", "r")
-
+fd2 = open("11- Archivos/email-simulation-exercise.txt", "w")
 
 setEmail = set() 
 for linea in fd:
@@ -9,6 +9,9 @@ for linea in fd:
         #print(email)
         setEmail.add(linea.split()[1])
 
-fd.close()
+
 for email in setEmail:
-    print(f"{email} sent [ok]")
+    fd2.writelines([f"{email} sent [ok]\n"])
+
+fd2.close()
+fd.close()
