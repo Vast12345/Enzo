@@ -15,6 +15,21 @@ def readId():
             input("Press any key to continue")
             print("\n", "=" * 30, "\n")
 
+def readPersonal():
+    while True:
+        try:
+            num = int(input("Enter the ID you wish to search: "))
+            if num < 1:
+                print("Error: Invalid input, must be a positive integer")
+                input("Press any key to continue")
+                print("\n", "=" * 30, "\n")
+                continue
+            return num
+        except ValueError:
+            print("Error: Invalid input, must be an integer")
+            input("Press any key to continue")
+            print("\n", "=" * 30, "\n")
+
 def readEdad():
     while True:
         try:
@@ -196,7 +211,29 @@ def modifyPersonal(lstPersonal, ruta):
         else:
             print("Ocurrio un error al borrar el empleado")
 
-
+def listPersonal(lstPersonal, ruta):
+    id = readPersonal()
+    if existeId(str(id), lstPersonal):
+        print("That ID does not exist")
+        print("\n", "=" * 30, "\n")
+        input()
+        return
+    for i in range(len(lstPersonal)):
+            datos = lstPersonal[i]
+            k = int(list(datos.keys())[0])
+            if k == id:
+                print(f"\n")
+                print(f"Name: {lstPersonal[i][str(id)]['nombre']}")
+                print(f"\n")
+                print(f"Age: {lstPersonal[i][str(id)]['edad']}")
+                print(f"\n")
+                print(f"Gender: {lstPersonal[i][str(id)]['sexo']}")
+                print(f"\n")
+                print(f"Phone Number: {lstPersonal[i][str(id)]['telefono']}")
+                print("\n", "=" * 30, "\n")
+                break
+    
+        
 
         
 
@@ -280,13 +317,12 @@ while True:
     option = menu()
     if option == 1:
         agregarPersonal(lstPersonal, rutaFile)
-        print(lstPersonal)
-        pass
     elif option == 2:
         modifyPersonal(lstPersonal, rutaFile)
     elif option == 3:
         borrarPersonal(lstPersonal, rutaFile)
     elif option == 4:
-        pass
+        listPersonal(lstPersonal, rutaFile)
     elif option == 5:
+        input("Thank you for using the program ... ")
         break
