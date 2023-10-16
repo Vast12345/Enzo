@@ -1,57 +1,51 @@
 
-# A try and except just in case there is some error with trying to access the archive
-try:
-    fd = open("11- Archivos/mbox.txt", "r")
-    fd2 = open("11- Archivos/mbox-short.txt", "r")
-except Exception as e:
-    print("Error in trying to open archive")
-    input()
-# Empty lists that will contain every Spam confidence mentioned in the .txt files
-setSpam = []
-lstSpam = []
+# While True function to print the menu, following it up with a user input that determines whether you inputted the right file name correctly. Afterwards, it creates the fie route into fd and returns it whilst also using a try and except function to make sure it doesnt crash if anything goes wrong.
+def openFile():
+    while True:
+        try:
+            print("\n", "=" * 30, "\n")
+            print("*** AVERAGE SPAM CONFIDENCE ***")
+            print("\n", "=" * 30, "\n")
+            name = input("Input file name --->")
+            if name != "mbox.txt" and name != "mbox-short.txt":
+                print("\n", "=" * 30, "\n")
+                print("Invalid: File must be either (mbox-short.txt/mbox.txt)")
+                input()
+                continue
+            fd = f"/home/Exegol-160/Enzo/11- Archivos/{name}"
+            return fd
+        except Exception as e:
+            print("Error opening file", e)
+            
+# List funciton that creates an empty list of which all the instances of the X-DSPAM-Confidence numbers will be put into. Using a try and except catch, it opens the file route which was returned in the previous function and searches and adds everything relating to the SPAM Confidence. Finally, it returns the list with every SPAM Confidence within it.
+def list(filename):
+    setSpam = []
+    
+    try:
+        with open(filename, "r") as file:
+            for line in file:
+                if line.startswith("X-DSPAM-Confidence"):
+                    setSpam.append(line.split()[1])
+    except Exception as e:
+        print("Error in opening the file: ",e)
+        
+    return setSpam
 
-#grabs every element that is displayed right after the term X-DSPAM-Confidence and adds it to its respective list
-for line in fd:
-    if line.startswith("X-DSPAM-Confidence"):
-        setSpam.append(line.split()[1])
-
-
-for line in fd2:
-    if line.startswith("X-DSPAM-Confidence"):
-        lstSpam.append(line.split()[1])
-
-# Close the files since we no longer need them
-fd2.close()
-fd.close()
-
-
-# Empty variables that will hold the sum for each .txt file
-suma = 0
-sumaShort = 0
-
-# The for loop that will grab every element within their respective list and continue adding up until the for loop is over
-for i in range(len(setSpam)):
-    suma += float(setSpam[i])
-
-for i in range(len(lstSpam)):
-    sumaShort += float(lstSpam[i])
-
-
-# The input that allows you to only try to access mbox.txt and mbox-short.txt
-while True:
-    print("\n", "=" * 30, "\n")
-    print("*** AVERAGE SPAM CONFIDENCE ***")
-    print("\n", "=" * 30, "\n")
-    file = input("Enter file name ---> ")
-    if file == "mbox.txt":
-        print(f"Average Spam confidence: {suma / len(setSpam)}")
-        print("\n", "=" * 30, "\n")
-        break  # To find the average I simply divided the sum with the length of the list
-    elif file == "mbox-short.txt":
-        print(f"Average Spam confidence: {sumaShort / len(lstSpam)}")
-        print("\n", "=" * 30, "\n")
-        break
-    else:
-        print("Invalid, file must be either: (mbox.txt) or (mbox-short.txt)")
+# Average function that grabs the list that was returned in the previous function and goes through every element and adding it into the varibale suma, Then it divides it by the length of the list and returns the average.
+def promedio(list):
+    suma = 0
+    for i in range(len(list)):
+        suma += float(list[i])
+        
+    suma /= len(list)
+    return suma
+    
+    
+    
+# Finally, all the functions being used to create the menu.
+file = openFile()
+lista = list(file)
+theAvergage = promedio(lista)
+print(f"The average X-DSPAM-Confidence is {theAvergage}")
 
 
