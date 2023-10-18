@@ -68,7 +68,7 @@ def menu():
             print("\t*** LIBRARY ***".center(40))
             print("MENU".center(45))
             print("1- INSERT")
-            print("2- CONSULTA ")
+            print("2- CONSULTA ")   
             print("3- EDIT")
             print("4- DELETE")
             print("5- LIST")
@@ -124,17 +124,18 @@ def existId(code, listLibrary):
             return True
     return False
 
-# def bubbleAlg(lstLibrary):
-#     # lstDic = []
-#     # for i in range(len(lstLibrary)):
-#     #     lstDic.append(lstLibrary[i])    # Before: lstVal = list(dicProducts.value())
-#     for i in range(len(lstLibrary)):
-#         for j in range(i+1):
-#             if list((lstLibrary[i]).keys()) > list((lstLibrary[j]).keys()):         #Before: if lstVal[i]["price"] > lstVal[j]["price"]
-#                 t = list((lstLibrary[i]).keys())                                        # Before: t = lstVal[i]["price"]
-#                 list((lstLibrary[i]).keys())  = list((lstLibrary[j]).keys())                                 #Before: lstVal[i][1]["price"] = lstVal[j][1]["price"]   
-#                 list((lstLibrary[j]).keys()) = t
-#     return lstLibrary
+def bubbleSortLibrary(lstLibrary):
+    n = len(lstLibrary)
+    for i in range(n - 1):
+        for j in range(0, n - i - 1):
+            # Compare the keys (book codes) of adjacent dictionaries
+            key1 = list(lstLibrary[j].keys())[0]
+            key2 = list(lstLibrary[j + 1].keys())[0]
+            if key1 > key2:
+                # Swap the dictionaries
+                lstLibrary[j], lstLibrary[j + 1] = lstLibrary[j + 1], lstLibrary[j]
+
+    return lstLibrary
 
 def saveLibrary(lstLibrary, route):
     try:
@@ -143,13 +144,13 @@ def saveLibrary(lstLibrary, route):
         print("Error in opening archive to save library.\n", e)
         return None
     try:
-        LstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
-        # lstLibrary = bubbleAlg(lstLibrary)
+        #LstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
+        lstLibrary = bubbleSortLibrary(lstLibrary)
         json.dump(LstLibrary, fd)
     except Exception as e:
         print("Error in saving the information of the new register.\n")
         return None
-    
+
     fd.close()
     return True
 
@@ -352,7 +353,7 @@ def loadInfo(lstLibrary, route):
     return lstLibrary
 
 
-routeFile = "11- Archivos/Json/Library-Archive.json"
+routeFile = "/home/Exegol-161/Enzo/11- Archivos/Json/Library-Archive.json"
 lstLibrary = []
 lstLibrary = loadInfo(lstLibrary, routeFile)
 
@@ -360,19 +361,14 @@ while True:
     option = menu()
     if option == 1:
         addRegister(lstLibrary, routeFile)
-        pass
     elif option == 2:
         consultRegister(lstLibrary, routeFile)
-        pass
     elif option == 3:
         editRegister(lstLibrary, routeFile)
-        pass
     elif option == 4:
         eraseRegister(lstLibrary, routeFile)
-        pass
     elif option == 5:
         listRegister(lstLibrary, routeFile)
-        pass
     elif option == 6:
         break
     
