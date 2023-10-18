@@ -66,13 +66,16 @@ def menu():
     while True:
         try:
             print("\t*** LIBRARY ***".center(40))
-            print("MENU".center(40))
+            print("MENU".center(45))
             print("1- INSERT")
             print("2- CONSULTA ")
-            print("3- EXIT")
+            print("3- EDIT")
+            print("4- DELETE")
+            print("5- LIST")
+            print("6- EXIT")
             opcion = int(input(">>>Ingrese una opcion: "))
-            if opcion < 1 or opcion > 3:
-                print("Error: Input must be between 1 and 3")
+            if opcion < 1 or opcion > 6:
+                print("Error: Input must be between 1 and 6")
                 input("Press any key to continue")
                 print("\n", "=" * 30, "\n")
                 continue
@@ -80,12 +83,58 @@ def menu():
         except ValueError:
             print("Error: Invalid option")
 
+def editMenu():
+    while True:
+        print("*** Modify Book ***".center(45))
+        print("1- Edit title")
+        print("2- Edit author")
+        print("3- Edit price")
+        print("4- Return")
+        n = int(input("Choose which option you would like to modify: "))
+        if n < 1 or n > 4:
+            print("Error: Input must be between 1 and 4")
+            input("Press any key to continue")
+            print("\n", "=" * 30, "\n")
+            continue
+        elif n == 4:
+            break
+        return n
+
+def listMenu():
+    while True:
+        print("*** LIST LIBRARY***".center(45))
+        print("1- List titles")
+        print("2- List authors")
+        print("3- List prices")
+        print("4- Return")
+        n = int(input("Choose which option you would like to modify: "))
+        if n < 1 or n > 4:
+            print("Error: Input must be between 1 and 4")
+            input("Press any key to continue")
+            print("\n", "=" * 30, "\n")
+            continue
+        elif n == 4:
+            break
+        return n
+
 def existId(code, listLibrary):
     for data in listLibrary:
         k = int(list(data.keys())[0])
         if k == code:
             return True
     return False
+
+# def bubbleAlg(lstLibrary):
+#     # lstDic = []
+#     # for i in range(len(lstLibrary)):
+#     #     lstDic.append(lstLibrary[i])    # Before: lstVal = list(dicProducts.value())
+#     for i in range(len(lstLibrary)):
+#         for j in range(i+1):
+#             if list((lstLibrary[i]).keys()) > list((lstLibrary[j]).keys()):         #Before: if lstVal[i]["price"] > lstVal[j]["price"]
+#                 t = list((lstLibrary[i]).keys())                                        # Before: t = lstVal[i]["price"]
+#                 list((lstLibrary[i]).keys())  = list((lstLibrary[j]).keys())                                 #Before: lstVal[i][1]["price"] = lstVal[j][1]["price"]   
+#                 list((lstLibrary[j]).keys()) = t
+#     return lstLibrary
 
 def saveLibrary(lstLibrary, route):
     try:
@@ -95,6 +144,7 @@ def saveLibrary(lstLibrary, route):
         return None
     try:
         LstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
+        # lstLibrary = bubbleAlg(lstLibrary)
         json.dump(LstLibrary, fd)
     except Exception as e:
         print("Error in saving the information of the new register.\n")
@@ -145,6 +195,137 @@ def consultRegister(lstLibrary, route):
                 print("\n", "=" * 30, "\n")
                 break
 
+def editRegister(lstLibrary, route):
+    code = readCode()
+    if existId(str(code), lstLibrary):
+        print("That ID does not exist")
+        input()
+        return
+    
+    n = editMenu()
+    if n == 1:
+        for i in range(len(lstLibrary)):
+            data = lstLibrary[i]
+            k = int(list(data.keys())[0])
+            if k == code:
+                lstLibrary[i][str(code)]["title"] = readTitle()
+        if saveLibrary(lstLibrary, route) == True:
+            print("The employee has been modified successfully")
+            input()
+        else:
+            print("Ocurrio un error al borrar el empleado")
+    elif n == 2:
+        for i in range(len(lstLibrary)):
+            data = lstLibrary[i]
+            
+            k = int(list(data.keys())[0])
+            if k == code:
+                
+                lstLibrary[i][str(code)]["author"] = readAuthor()
+        if saveLibrary(lstLibrary, route) == True:
+            print("The employee has been modified successfully")
+            input()
+        else:
+            print("Ocurrio un error al borrar el empleado")
+    elif n == 3:
+        for i in range(len(lstLibrary)):
+            data = lstLibrary[i]
+            
+            k = int(list(data.keys())[0])
+            if k == code:
+                
+                lstLibrary[i][str(code)]["price"] = readPrice()
+        if saveLibrary(lstLibrary, route) == True:
+            print("The employee has been modified successfully")
+            input()
+        else:
+            print("Ocurrio un error al borrar el empleado")
+
+def eraseRegister(lstLibrary, route):
+    print("\n\n3. Borrar Personal")
+
+    code = readCode()
+    if not existId(code, lstLibrary):
+        print("No existe un empleado cpn ese ID")
+        input()
+        return
+    
+    for i in range(len(lstLibrary)):
+        datos = lstLibrary[i]
+        k = int(list(datos.keys())[0])
+        if k == code:
+            del lstLibrary[i]
+            break
+    if saveLibrary(lstLibrary, route) == True:
+        print("El empleado ha sido borrado con exito")
+        input()
+    else:
+        print("Ocurrio un error al borrar el empleado")
+
+def listRegister(lstLibrary, route):
+    
+    n = listMenu()
+
+    listTitle = []
+    listAuthor = []
+    listPrice = []
+    for i in range(len(lstLibrary)):
+        data = lstLibrary[i]
+        listTitle.append(list(data.values())[0]['title'])
+    for i in range(len(lstLibrary)):
+        data = lstLibrary[i]
+        listAuthor.append(list(data.values())[0]['author'])
+    for i in range(len(lstLibrary)):
+        data = lstLibrary[i]
+        listPrice.append(list(data.values())[0]['price'])
+
+    listTitle = sorted(listTitle)
+    listAuthor = sorted(listAuthor)
+    listPrice = sorted(listPrice)
+
+    if n == 1:
+        count = 0
+
+        for e in listTitle:
+            print("\n", "=" * 30, "\n")
+            print(f"Title: {e}")
+            print("\n", "=" * 30, "\n")
+            
+            count += 1
+
+        if count % 3 == 0:
+            op = input("Do you wish to continue? (Y/N) ")
+            if op.lower() == "n":
+                return
+    elif n == 2:
+        count = 0
+
+        for e in listAuthor:
+            print("\n", "=" * 30, "\n")
+            print(f"Author: {e}")
+            print("\n", "=" * 30, "\n")
+            
+            count += 1
+
+        if count % 3 == 0:
+            op = input("Do you wish to continue? (Y/N) ")
+            if op.lower() == "n":
+                return
+    elif n == 3:
+        count = 0
+
+        for e in listPrice:
+            print("\n", "=" * 30, "\n")
+            print(f"Price: ${e}")
+            print("\n", "=" * 30, "\n")
+            
+            count += 1
+
+        if count % 3 == 0:
+            op = input("Do you wish to continue? (Y/N) ")
+            if op.lower() == "n":
+                return
+
 def loadInfo(lstLibrary, route):
     try:
         fd = open(route, "r")
@@ -171,7 +352,7 @@ def loadInfo(lstLibrary, route):
     return lstLibrary
 
 
-routeFile = "/home/Exegol-161/Enzo/11- Archivos/Json/LIbrary-Archive.json"
+routeFile = "11- Archivos/Json/Library-Archive.json"
 lstLibrary = []
 lstLibrary = loadInfo(lstLibrary, routeFile)
 
@@ -184,5 +365,14 @@ while True:
         consultRegister(lstLibrary, routeFile)
         pass
     elif option == 3:
+        editRegister(lstLibrary, routeFile)
+        pass
+    elif option == 4:
+        eraseRegister(lstLibrary, routeFile)
+        pass
+    elif option == 5:
+        listRegister(lstLibrary, routeFile)
+        pass
+    elif option == 6:
         break
     
