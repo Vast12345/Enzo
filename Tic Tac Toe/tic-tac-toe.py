@@ -80,6 +80,17 @@ def menu():
             print("Invalid: Input must be an integer between 1-3")
             print("\n", "=" * 30, "\n")
             input()
+            
+def bubbleSort(lstWinner):
+    n = len(lstWinner)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if lstWinner[j][list(lstWinner[j].keys())[0]]["time"] > lstWinner[j + 1][list(lstWinner[j + 1].keys())[0]]["time"]:
+                # Swap the elements
+                t = lstWinner[j]
+                lstWinner[j] = lstWinner[j + 1]
+                lstWinner[j + 1] = t
+
 
 def saveWinner(lstwinner, route):
     try:
@@ -88,6 +99,7 @@ def saveWinner(lstwinner, route):
         print("Error al abrir el archivo para guardar al empleado.\n", e)
         return None
     try:
+        # lstwinner = bubbleSort(lstwinner)
         json.dump(lstwinner, fd)
     except Exception as e:
         print("Error al guardar la informacion del emplaeado.\n")
@@ -97,17 +109,18 @@ def saveWinner(lstwinner, route):
     return True
 
 def addUser(lstwinners, route, user):
-    print("\n\n1. ADD REGISTER")
+    print("\n\n1. ADD USER")
 
     time = f"{elapsed_time:.2f}"
+    time = float(time)
 
 
     dicWinners = {}
     if winner == "X":
-        dicWinners[user] = {"time":int(time), "count":x_count}
+        dicWinners[user] = {"time":time, "count":x_count}
         lstwinners.append(dicWinners)
     elif winner == "O":
-        dicWinners[user] = {"time":int(time), "count":o_count}
+        dicWinners[user] = {"time":time, "count":o_count}
 
     if saveWinner(lstwinners, route) == True:
         input("The book has been registered successfully.\nPress any key to continue ... ")
@@ -228,7 +241,7 @@ def loadInfo(lstWinners, route):
         print("Error in loading information\n", e)
         return None
     
-    print(lstWinners)
+    # print(lstWinners)
     fd.close()
     return lstWinners
 
@@ -237,9 +250,12 @@ def loadInfo(lstWinners, route):
 
 
 
-routeFile = "/home/spukN01-021/Enzo/Tic Tac Toe/ticWinners.json"
+routeFile = "Tic Tac Toe/tic-tac-toe.json"
 lstWinners = []
 lstWinners = loadInfo(lstWinners, routeFile)
+bubbleSort(lstWinners)
+print(lstWinners)
+
 
 while True:
     player = "X"

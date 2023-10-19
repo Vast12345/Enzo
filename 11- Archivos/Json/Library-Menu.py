@@ -144,8 +144,8 @@ def saveLibrary(lstLibrary, route):
         print("Error in opening archive to save library.\n", e)
         return None
     try:
-        #LstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
-        lstLibrary = bubbleSortLibrary(lstLibrary)
+        lstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
+        # lstLibrary = bubbleSortLibrary(lstLibrary)
         json.dump(lstLibrary, fd)
     except Exception as e:
         print("Error in saving the information of the new register.\n")
@@ -353,7 +353,7 @@ def loadInfo(lstLibrary, route):
     return lstLibrary
 
 
-routeFile = "/home/Exegol-161/Enzo/11- Archivos/Json/Library-Archive.json"
+routeFile = "11- Archivos/Json/Library-Archive.json"
 lstLibrary = []
 lstLibrary = loadInfo(lstLibrary, routeFile)
 
