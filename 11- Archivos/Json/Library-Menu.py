@@ -146,7 +146,7 @@ def saveLibrary(lstLibrary, route):
     try:
         #LstLibrary = sorted(lstLibrary, key=lambda x: list(x.keys())[0], reverse=True)
         lstLibrary = bubbleSortLibrary(lstLibrary)
-        json.dump(LstLibrary, fd)
+        json.dump(lstLibrary, fd)
     except Exception as e:
         print("Error in saving the information of the new register.\n")
         return None
