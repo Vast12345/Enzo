@@ -1,7 +1,8 @@
 import time
 import json
-
+# Functions for making sure simple inputs are checked
 def readNum():
+    # A simple function that reads a number, determines if its less than or equal to 9, and then returns the number. It also checks for Value Errors
     while True:
         try:
             num = int(input("Input a tile (1-9) ---> "))
@@ -17,6 +18,7 @@ def readNum():
             print("\n", "=" * 30, "\n")
 
 def readUserX():
+    # A function that will read name of the user who will play as the X in the game. Checks for exceptions and returns the name.
     while True:
         try:
             phrase = input("USER X: Input Name --> ")
@@ -33,6 +35,7 @@ def readUserX():
             print("\n", "=" * 30, "\n")
 
 def readUserO():
+    # Same as the function above but is instead for the user who will use O
     while True:
         try:
             phrase = input("USER O: Input Name --> ")
@@ -48,27 +51,19 @@ def readUserO():
             input("Press any key to continue")
             print("\n", "=" * 30, "\n")
 
-def resetBoard():
-    global board
-    board = ["1", "2", "3",
-            "4", "5", "6",
-            "7", "8", "9"]
 
 
-
-
-winner = None
-
-
-
+# Menu which will display the three options available for the user
 def menu():
     while True:
         try:
+            print("\n")
             print("*** TIC TAC TOE ***".center(40))
             print("CHOOSE OPTION".center(40))
+            print("\n", "=" * 38, "\n")
             print("1- Play Game")
             print("2- Check Players")
-            print("3- Exit")
+            print("3- Exit\n")
             n = int(input("Choose an option (1-3) ---> "))
             if n < 1 or n > 3:
                 print("Invalid: Choose between 1-3")
@@ -81,15 +76,19 @@ def menu():
             print("\n", "=" * 30, "\n")
             input()
             
+
+# Functions that have to do with the list of players as well as the validation of the json file
 def bubbleSort(lstWinner):
+    # A function that acts as a bubble sort function that reads the time of the time of the users inside the lstWinner list
+
     n = len(lstWinner)
     for i in range(n):
-        for j in range(0, n - i - 1):
-            if lstWinner[j][list(lstWinner[j].keys())[0]]["time"] > lstWinner[j + 1][list(lstWinner[j + 1].keys())[0]]["time"]:
+        for j in range(i+1, n):
+            if lstWinner[j][list(lstWinner[j].keys())[0]]["time"] < lstWinner[i][list(lstWinner[i].keys())[0]]["time"]:
                 # Swap the elements
                 t = lstWinner[j]
-                lstWinner[j] = lstWinner[j + 1]
-                lstWinner[j + 1] = t
+                lstWinner[j] = lstWinner[i]
+                lstWinner[i] = t
 
 
 def saveWinner(lstwinner, route):
@@ -99,6 +98,7 @@ def saveWinner(lstwinner, route):
         print("Error al abrir el archivo para guardar al empleado.\n", e)
         return None
     try:
+        # The below command is what I tried to execute however it failed and I couldn't find a way to sort the json file instead of the physical list
         # lstwinner = bubbleSort(lstwinner)
         json.dump(lstwinner, fd)
     except Exception as e:
@@ -114,7 +114,7 @@ def addUser(lstwinners, route, user):
     time = f"{elapsed_time:.2f}"
     time = float(time)
 
-
+    # Go to the function check
     dicWinners = {}
     if winner == "X":
         dicWinners[user] = {"time":time, "count":x_count}
@@ -127,6 +127,35 @@ def addUser(lstwinners, route, user):
     else:
         input("An error occurred while registering the book.")
 
+def loadInfo(lstWinners, route):
+    try:
+        fd = open(route, "r")
+    except Exception as e:
+        try:
+            fd = open(route, "w")
+        except Exception as d:
+            print("Error in trying to open archive\n", d)
+            return None
+    
+    try:
+        line = fd.readline()
+        if line.strip() != "":
+            fd.seek(0)
+            lstWinners = json.load(fd)
+        else:
+            lstWinners = []
+    except Exception as e:
+        print("Error in loading information\n", e)
+        return None
+    
+    # print(lstWinners)
+    fd.close()
+    return lstWinners
+
+
+
+
+# Every function used to make sure the tic-tac-toe game works properly. From the board to the win checks, every function here makes sure everything is working smoothly
 def gameBoard(board):
     print(" +---+---+---+")
     print(" | " + board[0] + " | " + board[1] + " | " + board[2] + " | ")
@@ -135,6 +164,12 @@ def gameBoard(board):
     print(" +---+---+---+")
     print(" | " + board[6] + " | " + board[7] + " | " + board[8] + " | ")
     print(" +---+---+---+")
+
+def resetBoard():
+    global board
+    board = ["1", "2", "3",
+            "4", "5", "6",
+            "7", "8", "9"]
 
 def playerInput(board):
     inp = readNum()
@@ -220,43 +255,33 @@ def checkWin():
         checkCount(board)
         gameRunning = False
 
-def loadInfo(lstWinners, route):
-    try:
-        fd = open(route, "r")
-    except Exception as e:
-        try:
-            fd = open(route, "w")
-        except Exception as d:
-            print("Error in trying to open archive\n", d)
-            return None
-    
-    try:
-        line = fd.readline()
-        if line.strip() != "":
-            fd.seek(0)
-            lstWinners = json.load(fd)
-        else:
-            lstWinners = []
-    except Exception as e:
-        print("Error in loading information\n", e)
-        return None
-    
-    # print(lstWinners)
-    fd.close()
-    return lstWinners
+
+# Function for showing the list of winners from those who have the least amount of time.
+def showWinners(lstwinners):
+    for i in range(len(lstwinners)):
+            datos = lstwinners[i]
+            key = list(datos.keys())[0]
+            print(f"\n")
+            print(f"Name: {key}")
+            print(f"\n")
+            print(f"Time: {lstwinners[i][key]['time']}")
+            print(f"\n")
+            print(f"Amount of steps: {lstwinners[i][key]['count']}")
+            print("\n", "=" * 30, "\n")
+            input()
 
 
 
-
-
-
+# Variables that are used to display the json file as well as the winners. (Notice how I chose to use the sorting function here instead of inside the saveWinner function)...
 routeFile = "Tic Tac Toe/tic-tac-toe.json"
 lstWinners = []
 lstWinners = loadInfo(lstWinners, routeFile)
 bubbleSort(lstWinners)
-print(lstWinners)
+# print(lstWinners)
 
+winner = None
 
+# The classic while True function that shows the menu, the game, and the list of winners.
 while True:
     player = "X"
     gameRunning = True
@@ -281,7 +306,7 @@ while True:
             elif winner == "O":
                 addUser(lstWinners, routeFile, userO)
     elif op == 2:
-        pass
+        showWinners(lstWinners)
     elif op == 3:
         input()
         break
