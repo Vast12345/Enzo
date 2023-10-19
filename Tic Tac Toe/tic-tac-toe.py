@@ -1,3 +1,6 @@
+import time
+import json
+
 def readNum():
     while True:
         try:
@@ -13,14 +16,103 @@ def readNum():
             input("Press any key to continue")
             print("\n", "=" * 30, "\n")
 
-board = ["1", "2", "3",
-         "4", "5", "6",
-         "7", "8", "9"]
+def readUserX():
+    while True:
+        try:
+            phrase = input("USER X: Input Name --> ")
+            phrase = phrase.strip()
+            if len(phrase) == 0 or phrase.isalnum() == False:
+                print("Error: Invalid input, must be a string")
+                input("Press any key to continue")
+                print("\n", "=" * 30, "\n")
+                continue
+            return phrase
+        except Exception as e:
+            print(f"Error: Invalid input, must be a string\n{e}")
+            input("Press any key to continue")
+            print("\n", "=" * 30, "\n")
 
-player = "X"
+def readUserO():
+    while True:
+        try:
+            phrase = input("USER O: Input Name --> ")
+            phrase = phrase.strip()
+            if len(phrase) == 0 or phrase.isalnum() == False:
+                print("Error: Invalid input, must be a string")
+                input("Press any key to continue")
+                print("\n", "=" * 30, "\n")
+                continue
+            return phrase
+        except Exception as e:
+            print(f"Error: Invalid input, must be a string\n{e}")
+            input("Press any key to continue")
+            print("\n", "=" * 30, "\n")
+
+def resetBoard():
+    global board
+    board = ["1", "2", "3",
+            "4", "5", "6",
+            "7", "8", "9"]
+
+
+
+
 winner = None
-gameRunning = True
 
+
+
+def menu():
+    while True:
+        try:
+            print("*** TIC TAC TOE ***".center(40))
+            print("CHOOSE OPTION".center(40))
+            print("1- Play Game")
+            print("2- Check Players")
+            print("3- Exit")
+            n = int(input("Choose an option (1-3) ---> "))
+            if n < 1 or n > 3:
+                print("Invalid: Choose between 1-3")
+                print("\n", "=" * 30, "\n")
+                input()
+                continue
+            return n
+        except ValueError:
+            print("Invalid: Input must be an integer between 1-3")
+            print("\n", "=" * 30, "\n")
+            input()
+
+def saveWinner(lstwinner, route):
+    try:
+        fd = open(route, "w")
+    except Exception as e:
+        print("Error al abrir el archivo para guardar al empleado.\n", e)
+        return None
+    try:
+        json.dump(lstwinner, fd)
+    except Exception as e:
+        print("Error al guardar la informacion del emplaeado.\n")
+        return None
+    
+    fd.close()
+    return True
+
+def addUser(lstwinners, route, user):
+    print("\n\n1. ADD REGISTER")
+
+    time = f"{elapsed_time:.2f}"
+
+
+    dicWinners = {}
+    if winner == "X":
+        dicWinners[user] = {"time":int(time), "count":x_count}
+        lstwinners.append(dicWinners)
+    elif winner == "O":
+        dicWinners[user] = {"time":int(time), "count":o_count}
+
+    if saveWinner(lstwinners, route) == True:
+        input("The book has been registered successfully.\nPress any key to continue ... ")
+    else:
+        input("An error occurred while registering the book.")
 
 def gameBoard(board):
     print(" +---+---+---+")
@@ -71,6 +163,18 @@ def checkDiagonal(board):
         winner = board[0]
         return True
 
+def checkCount(board):
+    global x_count
+    global o_count
+    x_count = 0
+    o_count = 0
+    for e in board:
+        if e == "X":
+            x_count += 1
+        elif e == "O":
+            o_count += 1
+    return print(f"The amount of steps for X is {x_count} and the amount of steps for O is {o_count}\n")
+
 def checkTie(board):
     global gameRunning
     is_tie = True  # Assume it's a tie by default
@@ -84,6 +188,7 @@ def checkTie(board):
     if is_tie:
         gameBoard(board)
         print("TIE")
+        checkCount(board)
         gameRunning = False
 
 def switchPlayer():
@@ -98,12 +203,69 @@ def checkWin():
     if checkHorizontal(board) or checkDiagonal(board) or checkVertical(board):
         gameBoard(board)
         print(f"The winner is: {winner}")
+
+        checkCount(board)
         gameRunning = False
 
+def loadInfo(lstWinners, route):
+    try:
+        fd = open(route, "r")
+    except Exception as e:
+        try:
+            fd = open(route, "w")
+        except Exception as d:
+            print("Error in trying to open archive\n", d)
+            return None
+    
+    try:
+        line = fd.readline()
+        if line.strip() != "":
+            fd.seek(0)
+            lstWinners = json.load(fd)
+        else:
+            lstWinners = []
+    except Exception as e:
+        print("Error in loading information\n", e)
+        return None
+    
+    print(lstWinners)
+    fd.close()
+    return lstWinners
 
-while gameRunning:
-    gameBoard(board)
-    playerInput(board)
-    checkWin()
-    checkTie(board)
-    switchPlayer()
+
+
+
+
+
+routeFile = "/home/spukN01-021/Enzo/Tic Tac Toe/ticWinners.json"
+lstWinners = []
+lstWinners = loadInfo(lstWinners, routeFile)
+
+while True:
+    player = "X"
+    gameRunning = True
+    op = menu()
+    if op == 1:
+        userX = readUserX()
+        userO = readUserO()
+        start_time = time.time()
+        resetBoard()
+        while gameRunning:
+            gameBoard(board)
+            playerInput(board)
+            checkWin()
+            checkTie(board)
+            switchPlayer()
+        if not gameRunning:
+            end_time = time.time()
+            elapsed_time = end_time - start_time
+            print(f"The amount of time elapsed in playing was {elapsed_time:.2f} seconds.")
+            if winner == "X":
+                addUser(lstWinners, routeFile, userX)
+            elif winner == "O":
+                addUser(lstWinners, routeFile, userO)
+    elif op == 2:
+        pass
+    elif op == 3:
+        input()
+        break
