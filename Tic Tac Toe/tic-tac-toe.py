@@ -82,13 +82,20 @@ def bubbleSort(lstWinner):
     # A function that acts as a bubble sort function that reads the time of the time of the users inside the lstWinner list
 
     n = len(lstWinner)
+    # Similar Bubble sort function but changed to find the value 'time'
     for i in range(n):
         for j in range(i+1, n):
-            if lstWinner[j][list(lstWinner[j].keys())[0]]["time"] < lstWinner[i][list(lstWinner[i].keys())[0]]["time"]:
-                # Swap the elements
+            # Checks whether the count is lower and if so should then be displayed first.
+            if lstWinner[j][list(lstWinner[j].keys())[0]]["count"] < lstWinner[i][list(lstWinner[i].keys())[0]]["count"]:
                 t = lstWinner[j]
                 lstWinner[j] = lstWinner[i]
                 lstWinner[i] = t
+            # elif Conditional that checks if the count is the same, and if so, checks whether the the time is shorter.
+            elif lstWinner[j][list(lstWinner[j].keys())[0]]["count"] == lstWinner[i][list(lstWinner[i].keys())[0]]["count"]:
+                if lstWinner[j][list(lstWinner[j].keys())[0]]["time"] < lstWinner[i][list(lstWinner[i].keys())[0]]["time"]:
+                    t = lstWinner[j]
+                    lstWinner[j] = lstWinner[i]
+                    lstWinner[i] = t
 
 
 def saveWinner(lstwinner, route):
@@ -98,8 +105,6 @@ def saveWinner(lstwinner, route):
         print("Error al abrir el archivo para guardar al empleado.\n", e)
         return None
     try:
-        # The below command is what I tried to execute however it failed and I couldn't find a way to sort the json file instead of the physical list
-        # lstwinner = bubbleSort(lstwinner)
         json.dump(lstwinner, fd)
     except Exception as e:
         print("Error al guardar la informacion del emplaeado.\n")
@@ -114,7 +119,7 @@ def addUser(lstwinners, route, user):
     time = f"{elapsed_time:.2f}"
     time = float(time)
 
-    # Go to the function check
+    # Go to the principle program to understand the if conditionals
     dicWinners = {}
     if winner == "X":
         dicWinners[user] = {"time":time, "count":x_count}
@@ -127,6 +132,7 @@ def addUser(lstwinners, route, user):
     else:
         input("An error occurred while registering the book.")
 
+# Function that will load everything from the json file onto the list that is just before the main program.
 def loadInfo(lstWinners, route):
     try:
         fd = open(route, "r")
@@ -157,6 +163,7 @@ def loadInfo(lstWinners, route):
 
 # Every function used to make sure the tic-tac-toe game works properly. From the board to the win checks, every function here makes sure everything is working smoothly
 def gameBoard(board):
+    # The Game board visual. Each slot in the board represents a part of the list that is just below.
     print(" +---+---+---+")
     print(" | " + board[0] + " | " + board[1] + " | " + board[2] + " | ")
     print(" +---+---+---+")
@@ -166,12 +173,14 @@ def gameBoard(board):
     print(" +---+---+---+")
 
 def resetBoard():
+    # The list that has every number seen on the actual board. The reason it is in a function is so that the board can be reverted back to normal once a game has finished 
     global board
     board = ["1", "2", "3",
             "4", "5", "6",
             "7", "8", "9"]
 
 def playerInput(board):
+    # The player input which will read a number from 1-9 and replace the board slot with whatever sign the player is using (By default, the first user will always be X and the second player O)
     inp = readNum()
     if board[inp-1].isdigit():
         board[inp-1] = player
@@ -179,6 +188,7 @@ def playerInput(board):
         print("Someone is already in the selected slot.")
 
 def checkHorizontal(board):
+    # The same concept for every condition that would qualify as a win. The board checks if three slots horizontally have are the same and are not digits, then makes the winner whatever sign the occupies the slot
     global winner
     if board[0] == board[1] == board[2] and board[1].isdigit() == False:
         winner = board[0]
@@ -191,6 +201,7 @@ def checkHorizontal(board):
         return True
 
 def checkVertical(board):
+    # Same idea as before
     global winner
     if board[0] == board[3] == board[6] and board[0].isdigit() == False:
         winner = board[0]
@@ -203,6 +214,7 @@ def checkVertical(board):
         return True
     
 def checkDiagonal(board):
+    # Same idea as before
     global winner
     if board[0] == board[4] == board[8] and board[0].isdigit() == False:
         winner = board[0]
@@ -212,6 +224,7 @@ def checkDiagonal(board):
         return True
 
 def checkCount(board):
+    # This is the function that will count how many X's or O's are in the board, and then add one into their individual variable.
     global x_count
     global o_count
     x_count = 0
@@ -224,6 +237,7 @@ def checkCount(board):
     return print(f"The amount of steps for X is {x_count} and the amount of steps for O is {o_count}\n")
 
 def checkTie(board):
+    # Simple check to see if every slot is occupied by something that isn't a digit and follows it up with a tie.
     global gameRunning
     is_tie = True  # Assume it's a tie by default
 
@@ -240,6 +254,7 @@ def checkTie(board):
         gameRunning = False
 
 def switchPlayer():
+    # Simple switch that will make it so that with every loop that occurs each time something happens in the game, the player variable that holds whatever sign it is currently using and switch it to the next one
     global player
     if player == "X":
         player = "O"
@@ -247,17 +262,19 @@ def switchPlayer():
         player = "X"
 
 def checkWin():
+    # Function that uses the previous checks and uses them to produce a winner
     global gameRunning
     if checkHorizontal(board) or checkDiagonal(board) or checkVertical(board):
         gameBoard(board)
         print(f"The winner is: {winner}")
-
         checkCount(board)
         gameRunning = False
 
 
 # Function for showing the list of winners from those who have the least amount of time.
 def showWinners(lstwinners):
+    # Similar to previous usages of the list functions, finds the value to each piece of data and displays them. Notice how i use the bubbleSort() algorithm here instead of inside the saveWinner() function.
+    bubbleSort(lstwinners)
     for i in range(len(lstwinners)):
             datos = lstwinners[i]
             key = list(datos.keys())[0]
@@ -268,21 +285,21 @@ def showWinners(lstwinners):
             print(f"\n")
             print(f"Amount of steps: {lstwinners[i][key]['count']}")
             print("\n", "=" * 30, "\n")
-            input()
+            input("Press any key to continue ... ")
 
 
 
-# Variables that are used to display the json file as well as the winners. (Notice how I chose to use the sorting function here instead of inside the saveWinner function)...
+# Variables that are used to display the json file as well as the winners. 
 routeFile = "Tic Tac Toe/tic-tac-toe.json"
 lstWinners = []
 lstWinners = loadInfo(lstWinners, routeFile)
-bubbleSort(lstWinners)
 # print(lstWinners)
 
 winner = None
 
 # The classic while True function that shows the menu, the game, and the list of winners.
 while True:
+    # All the variables that are needed to revert to normal once the next while loop ends.
     player = "X"
     gameRunning = True
     op = menu()
@@ -291,6 +308,7 @@ while True:
         userO = readUserO()
         start_time = time.time()
         resetBoard()
+        # I couldn't figure out a surefire way to make the loop end and then be able to run again so I simply reverted the True in the while True loop into a variable.
         while gameRunning:
             gameBoard(board)
             playerInput(board)
@@ -298,6 +316,7 @@ while True:
             checkTie(board)
             switchPlayer()
         if not gameRunning:
+            # The time module that was used to track the time. Notice how the start_time variable was used before the while loop to ensure it doesnt reset with every move made in the game.
             end_time = time.time()
             elapsed_time = end_time - start_time
             print(f"The amount of time elapsed in playing was {elapsed_time:.2f} seconds.")
@@ -306,7 +325,10 @@ while True:
             elif winner == "O":
                 addUser(lstWinners, routeFile, userO)
     elif op == 2:
+        # The function to show the list
         showWinners(lstWinners)
     elif op == 3:
-        input()
+        # The simple break function
+        input("Press any key to continue ... ")
         break
+
